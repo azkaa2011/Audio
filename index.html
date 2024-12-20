@@ -1,0 +1,575 @@
+
+<!DOCTYPE html>
+<html lang="id" oncontextmenu="return false;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        /* General Styling */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
+        }
+#net, #prv {
+    color: #888;
+    pointer-events: none;
+}
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #121212;
+            font-family: "Poppins", sans-serif;
+            padding: 20px;
+        }
+
+        /* Audio Player Container */
+        .audio-player {
+            text-align: center;
+            background: #1d1d1d;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            max-width: 100%;
+            width: 350px;
+            margin-bottom: 20px;
+        }
+
+        /* Cover Image */
+        .cover-container {
+            overflow: hidden;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .cover-image {
+            width: 100%;
+            height: auto;
+            transition: transform 0.3s;
+            border-radius: 10px;
+        }
+
+        .cover-image:hover {
+            transform: scale(1.05);
+        }
+
+        /* Song Info */
+        .song-band, .song-title {
+            letter-spacing: 1px;
+            margin: 5px 0;
+            font-size: 1.6em;
+            color: #ffffff;
+        }
+
+        /* Controls */
+        .controls {
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .control-button {
+            margin: 0 10px;
+            padding: 10px 12px;
+            border: none;
+            border-radius: 50%;
+            background-color: #1d1d1d;
+            color: white;
+            font-size: 1.7em;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .control-button:hover {
+            background-color: #1aa34a;
+        }
+
+        .control-button:active {
+            transform: scale(0.95);
+        }
+
+        /* Song List */
+        .song-list {
+            width: 100%;
+            max-width: 350px;
+            background: #1d1d1d;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .song-list h3 {
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+            text-align: center;
+            font-size: 1.5em;
+            color: #ffffff;
+        }
+
+        #songList {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #songList li {
+            padding: 10px;
+            border-bottom: 1px solid #333;
+            color: #b3b3b3;
+            cursor: pointer;
+        }
+
+        #songList li:hover {
+            background-color: #1aa34a;
+            color: white;
+            transition: background-color ease-in-out 0.2s;
+        }
+
+        /* Abang */
+        .abang {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .abang img {
+            margin-left: 10px;
+            width: 40px;
+            height: 40px;
+        }
+
+        /* Timer */
+        .timer-input {
+            width: 100%;
+            margin: 10px 0;
+            -webkit-appearance: none;
+            background: white;
+            height: 5px;
+            border-radius: 5px;
+        }
+
+        .timer-input::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+        }
+
+        .timer-input::-moz-range-thumb {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+        }
+
+        /* Current Time and Duration */
+        .slas {
+            color: white;
+        }
+      
+              /* General Styling */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #121212;
+            font-family: "Poppins", sans-serif;
+            padding: 20px;
+        }
+
+        /* Audio Player Container */
+        .audio-player {
+            text-align: center;
+            background: #1d1d1d;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            max-width: 100%;
+            margin-left: -3px;
+            width: 370px;
+            margin-bottom: 20px;
+        }
+
+        /* Cover Image */
+        .cover-container {
+            overflow: hidden;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .cover-image {
+            width: 100%;
+            height: auto;
+            transition: transform 0.3s;
+            border-radius: 10px;
+        }
+
+        .cover-image:hover {
+            transform: scale(1.05);
+        }
+
+        /* Song Info */
+        .song-band, .song-title {
+            letter-spacing: 1px;
+            margin: 5px 0;
+            font-size: 1.6em;
+            color: #ffffff;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .control-button {
+            margin: 0 10px;
+            padding: 10px 12px;
+            border: none;
+            border-radius: 50%;
+            background-color: #1d1d1d;
+            color: white;
+            font-size: 1.7em;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .control-button:hover {
+            background-color: #1aa34a;
+        }
+
+        .control-button:active {
+            transform: scale(0.95);
+        }
+
+        /* Song List */
+        .song-list {
+            width: 100%;
+            max-width: 350px;
+            background: transparent;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .song-list h3 {
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+            text-align: center;
+            font-size: 1.5em;
+            color: #ffffff;
+        }
+
+        #songList {
+            width: 0px;
+            list-style-type: none;
+            padding: 0;
+            font-size: 0px;
+        }
+
+        #songList li {
+            padding: 0px;
+            border-bottom: 0px solid #333;
+            color: #b3b3b3;
+            cursor: pointer;
+        }
+
+        #songList li:hover {
+            background-color: #1aa34a;
+            color: white;
+            transition: background-color ease-in-out 0.2s;
+        }
+
+        /* Abang */
+        .abang {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .abang img {
+            margin-left: 10px;
+            width: 40px;
+            height: 40px;
+        }
+
+        /* Timer */
+        .timer-input {
+            width: 100%;
+            margin: 10px 0;
+            -webkit-appearance: none;
+            background: white;
+            height: 5px;
+            border-radius: 5px;
+        }
+
+        .timer-input::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+        }
+
+        .timer-input::-moz-range-thumb {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+        }
+        #current-time, #duration {
+            color: #fff;
+            font-size: 13px;
+            margin-top: 12px;
+        }
+    
+      .spn span {
+    margin: 0 40px; /* Menambahkan jarak 10px di kiri dan kanan */
+}
+        /* Responsive Adjustments */
+        @media (max-width: 400px) {
+            .audio-player, .song-list {
+                width: 100%;
+            }
+
+            .song-band, .song-title {
+                font-size: 1.4em;
+            }
+        }
+        /* Controls */
+.controls {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.control-button {
+    margin: 0 10px; /* Margin antara tombol */
+    padding: 10px 12px;
+    border: none;
+    border-radius: 50%; /* Membuat tombol bulat */
+    background-color: #1d1d1d; /* Warna tombol hijau Spotify */
+    color: white;
+    font-size: 1.7em; /* Ukuran font lebih besar */
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+/* Menghilangkan efek hover dan klik pada perangkat seluler */
+.control-button:hover, .control-button:focus, .control-button:active {
+    background-color: #1d1d1d !important; /* Tetap warna latar default */
+    color: white !important; /* Tetap warna teks default */
+    transform: none !important; /* Nonaktifkan transformasi */
+}
+    
+        /* Responsive Adjustments */
+        @media (max-width: 400px) {
+            .audio-player, .song-list {
+                width: 100%;
+            }
+
+            .song-band, .song-title {
+                font-size: 1.4em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="audio-player">
+        <div class="abang">
+            <h1 class="song-title">Music Player</h1>
+            <img src="https://media.tenor.com/Bn8sxwFw-F4AAAAi/catjam-cat.gif" alt="Cat Jam">
+        </div>
+        <div class="cover-container">
+            <img src="cover.jpg" alt="Cover Image" class="cover-image" id="cover">
+        </div>
+        <h1 class="song-band" id="band"></h1>
+        <h6 class="song-title" id="judul">virgoun - Bukti</h6>
+        <audio id="audio" src="lagu.mp3"></audio>
+        <input type="range" id="timer" value="0" step="1" min="0" class="timer-input">
+        <div> <span class="slas"></span> 
+            </div>
+         <div class="controls">
+              <span id="current-time">0:00</span>
+            <button id="prv" class="control-button">
+                <span class="material-icons">skip_previous</span>
+            </button>
+            <button id="play" class="control-button">
+                <span class="material-icons" id="play-icon">play_arrow</span>
+            </button>
+            <button id="net" class="control-button">
+                <span class="material-icons">skip_next</span>
+            </button>
+              <span id="duration">0:00</span>
+        </div>
+    </div>
+
+        <ul id="songList"></ul>
+    <script>
+    const databaseMusic = [
+    {
+        cover: "p.jpg",
+        NamaBand: "Nakhoda",
+        judulLagu: "Aku yang malang 4",
+        lagu: "akuyangmalang4.mp3",
+    },
+    {
+    //    cover: "https://audio-p-layer.vercel.app/data/image/img/demo.jpg",
+     // NamaBand: "My Chemical Romance",
+    //    judulLagu: "Demolition Lovers",
+    //    lagu: "https://audio-p-layer.vercel.app/data/song/Demolition Lovers.mp3",
+    }
+];
+
+// Variabel kontrol
+let currentSongIndex = 0;
+let isPlaying = false;
+
+// Input kontrol range 
+const timer = document.getElementById("timer");
+const currentTimeDisplay = document.getElementById("current-time");
+const durationDisplay = document.getElementById("duration");
+
+// Kontrol elemen DOM
+const cover = document.getElementById("cover");
+const namaBand = document.getElementById("band");
+const judul = document.getElementById("judul");
+const music = document.getElementById("audio");
+const icon = document.getElementById("play-icon");
+const play = document.getElementById("play");
+const next = document.getElementById("next");
+const prev = document.getElementById("prev");
+const songList = document.getElementById("songList");
+
+// Memuat data lagu
+function muatData(index) {
+    cover.src = databaseMusic[index].cover;
+    namaBand.textContent = databaseMusic[index].NamaBand;
+    judul.textContent = databaseMusic[index].judulLagu;
+    music.src = databaseMusic[index].lagu;
+}
+
+// Muat data lagu pertama
+muatData(currentSongIndex);
+
+function isiDaftarLagu() {
+    for (let i = 0; i < databaseMusic.length; i++) {
+        const song = databaseMusic[i];
+        const li = document.createElement("li");
+        li.textContent = `${song.NamaBand} - ${song.judulLagu}`;
+        
+        // Event listener untuk klik
+        li.addEventListener("click", () => {
+            currentSongIndex = i; // Mengatur index lagu yang dipilih
+            muatData(currentSongIndex);
+            if (isPlaying) {
+                music.play();
+            }
+        });
+
+        songList.appendChild(li); // Menambahkan item lagu ke dalam ul
+    }
+}
+
+// Panggil fungsi untuk mengisi daftar lagu
+isiDaftarLagu();
+
+music.addEventListener("loadedmetadata", () => {
+    timer.max = Math.floor(music.duration); // Set max value dari slider ke durasi lagu
+    durationDisplay.textContent = formatTime(music.duration); // Tampilkan durasi lagu
+});
+
+music.addEventListener("timeupdate", () => {
+    timer.value = Math.floor(music.currentTime); // Update nilai slider sesuai waktu saat ini
+    currentTimeDisplay.textContent = formatTime(music.currentTime); // Tampilkan waktu saat ini
+
+    // Update background slider untuk mencerminkan posisi saat ini
+    const percentage = (music.currentTime / music.duration) * 100;
+    timer.style.background = `linear-gradient(to right, #4CAF50 ${percentage}%, #ccc ${percentage}%)`; // Update warna slider
+});
+
+// Pindah ke lagu berikutnya saat lagu selesai
+music.addEventListener("ended", () => {
+    currentSongIndex = (currentSongIndex + 1) % databaseMusic.length; // Pindah ke lagu berikutnya
+    muatData(currentSongIndex);
+    if (isPlaying) {
+        music.play(); // Mulai memutar lagu jika sebelumnya dalam keadaan play
+    }
+});
+
+// Fungsi untuk memformat waktu dari detik ke format menit:detik
+function formatTime(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${minutes}:${secs < 10 ? '0' : ''}${secs}`; // Format menjadi mm:ss
+}
+
+// Event listener untuk mengubah posisi lagu saat slider digeser
+timer.addEventListener("input", () => {
+    music.currentTime = timer.value; // Set waktu lagu ke nilai slider
+});
+
+// Fungsi play/pause
+play.addEventListener("click", () => {
+    if (isPlaying) {
+        music.pause();
+        icon.textContent = "play_arrow";
+    } else {
+        music.play();
+        icon.textContent = "pause";
+    }
+    isPlaying = !isPlaying;
+});
+
+// Fungsi untuk tombol next
+next.addEventListener("click", () => {
+    currentSongIndex = (currentSongIndex + 1) % databaseMusic.length;
+    muatData(currentSongIndex);
+
+    // Memulai lagu jika sebelumnya dalam keadaan play
+    if (isPlaying) {
+        music.play();
+    }
+});
+
+// Fungsi untuk tombol prev
+prev.addEventListener("click", () => {
+    currentSongIndex = (currentSongIndex - 1 + databaseMusic.length) % databaseMusic.length;
+    muatData(currentSongIndex);
+
+    // Memulai lagu jika sebelumnya dalam keadaan play
+    if (isPlaying) {
+        music.play();
+    }
+});
+    </script>
+</body>
+</html>
